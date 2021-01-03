@@ -58,6 +58,10 @@ article, aside, figcaption, figure, footer, header, hgroup, main, nav, section {
   display: block;
 }
 
+a.link {
+  color: #d02d00;
+}
+
 body {
   margin: 0;
   font-family: "Merriweather", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
@@ -2470,28 +2474,28 @@ fieldset:disabled a.btn {
 }
 
 .btn-primary {
-  color: #fff;
+  color: #000000cf;
   background-color: #f4623a;
   border-color: #f4623a;
 }
 .btn-primary:hover {
-  color: #fff;
+  color: #000000cf;
   background-color: #f24516;
   border-color: #ee3e0d;
 }
 .btn-primary:focus, .btn-primary.focus {
-  color: #fff;
+  color: #000000cf;
   background-color: #f24516;
   border-color: #ee3e0d;
   box-shadow: 0 0 0 0.2rem rgba(246, 122, 88, 0.5);
 }
 .btn-primary.disabled, .btn-primary:disabled {
-  color: #fff;
+  color: #000000cf;
   background-color: #f4623a;
   border-color: #f4623a;
 }
 .btn-primary:not(:disabled):not(.disabled):active, .btn-primary:not(:disabled):not(.disabled).active, .show > .btn-primary.dropdown-toggle {
-  color: #fff;
+  color: #000000cf;
   background-color: #ee3e0d;
   border-color: #e23a0d;
 }
