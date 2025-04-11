@@ -11,7 +11,7 @@ function mostrarVisitas(data) {
 
 (function () {
 	const script = document.createElement('script');
-	script.src = 'https://script.google.com/macros/s/AKfycbwZrlB6VelnVc_lWh9Kmn56UiiT_qHL7Dji2xGOu9GnvMqsycKpbNYeuVcg82m0b9HT6A/exec?callback=mostrarVisitas';
+	script.src = 'https://script.google.com/macros/s/AKfycbw5pQ0lGmZvVZs9mm99ezzDZUKCXE6pJD4xgfS4TNj1mxiL15RlqHNUtObLdNxwBIoUdA/exec?callback=mostrarVisitas';
 	document.body.appendChild(script);
 })();
   
