@@ -2,6 +2,7 @@
 function mostrarVisitas(data) {
 	const countEl = document.getElementById('count');
 	if (data && data.visitas !== undefined) {
+		console.log(data);
 		countEl.textContent = data.visitas;
 	} else {
 		countEl.textContent = 'Error 😢';
