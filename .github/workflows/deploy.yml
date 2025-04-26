@@ -23,6 +23,13 @@ jobs:
 
     - name: Install dependencies
       run: npm install
+    
+    - name: Debug info
+      run: |
+        echo "Debugging info..."
+        node --version
+        npm --version
+        ls -la
 
     - name: Run build
       run: npm run build
