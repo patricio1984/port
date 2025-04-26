@@ -1,0 +1,113 @@
+.contact_wrapper svg {
+  font-size: 1em;
+  vertical-align: middle;
+  margin-right: 5px;
+}
+
+.contact-form {
+  padding-top: 20px;
+
+  button {
+    float: right;
+    background-color: white;
+    color: #050f0b;
+  }
+
+  button:hover {
+    background-color: #5000ca;
+    color: white;
+  }
+}
+
+label {
+  font-size: 1.2rem;
+  font-family: 'DomaineDispNar-Medium', sans-serif;
+}
+
+.form-flex {
+  display: flex;
+  gap: 15px;
+  padding-bottom: 15px;
+}
+
+.form-flex .MuiFormControl-root {
+  width: 100%;
+  background-color: #FFFFFF;
+}
+
+form {
+  width: 100% !important;
+}
+
+.body-form {
+  width: 100% !important;
+  margin-bottom: 15px !important;
+  padding: 16.5px 14px;
+  font-size: 16px;
+  font-family: 'Roboto', sans-serif;
+  border: 1px solid rgba(0, 0, 0, 0.23);
+  border-radius: 4px;
+  background-color: #fff;
+  color: #000;
+  line-height: 1.4375em;
+  transition: border-color 0.3s ease;
+
+  &:focus {
+    outline: none;
+    border-color: #3f51b5;
+    box-shadow: 0 0 0 2px rgba(63, 81, 181, 0.2);
+  }
+
+  &::placeholder {
+    color: rgba(0, 0, 0, 0.6);
+  }
+}
+
+.body-form.error {
+  border-color: #d32f2f;
+}
+
+.helper-text {
+  color: #d32f2f;
+  background-color: #FFFFFF;
+  font-size: 0.75rem;
+  margin-top: -22px;
+  margin-bottom: 16px;
+  padding: 4px 14px;
+  display: block;
+}
+
+.contact-form input,
+.contact-form textarea {
+  color: #000 !important;
+  font-size: 16px;
+}
+
+.contact-form .MuiInputBase-root {
+  color: #000 !important;
+  background-color: #FFFFFF;
+}
+
+.contact-form .form-flex .MuiFormControl-root { /* Más específico */
+  width: calc(50% - 7.5px);
+  background-color: #FFFFFF;
+}
+
+.feedback-message {
+  margin: 15px 0;
+  padding: 12px;
+  border-radius: 6px;
+  font-weight: 500;
+  text-align: center;
+
+  &.success {
+    background-color: #e6f4ea;
+    color: #2e7d32;
+  }
+
+  &.error {
+    background-color: #fdecea;
+    color: #c62828;
+  }
+}
+
