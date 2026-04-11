@@ -1,5 +1,4 @@
 import React, { useId, useState } from 'react';
-import emailjs from '@emailjs/browser';
 import '../assets/styles/Contact.scss';
 
 // ─── Inline send arrow — no MUI dependency ────────────────────────────────────
@@ -45,22 +44,31 @@ function Contact() {
 
     if (!nameValid || !emailValid || !messageValid) return;
 
+    // Envío directo a Formspree (sin backend)
     setIsSending(true);
-    emailjs
-      .send(
-        import.meta.env.VITE_EMAILJS_SERVICE_ID!,
-        import.meta.env.VITE_EMAILJS_TEMPLATE_ID!,
-        { name, email, message },
-        import.meta.env.VITE_EMAILJS_PUBLIC_KEY!
-      )
-      .then(() => {
+    const endpoint = 'https://formspree.io/f/maqlrzee';
+
+    fetch(endpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+      body: JSON.stringify({ name, email, message }),
+    })
+      .then(async (res) => {
+        const data = await res.json().catch(() => null);
+        if (!res.ok) {
+          console.error('Formspree error:', res.status, data || await res.text().catch(() => ''));
+          setIsSuccess(false);
+          setFeedback('Ocurrió un error. Intentalo más tarde.');
+          setTimeout(() => setFeedback(null), 5000);
+          return;
+        }
         setName(''); setEmail(''); setMessage('');
         setIsSuccess(true);
         setFeedback('Mensaje enviado con éxito.');
         setTimeout(() => setFeedback(null), 5000);
       })
       .catch((err: unknown) => {
-        console.error('EmailJS error:', err);
+        console.error('MailerSend error:', err);
         setIsSuccess(false);
         setFeedback('Ocurrió un error. Intentalo más tarde.');
         setTimeout(() => setFeedback(null), 5000);

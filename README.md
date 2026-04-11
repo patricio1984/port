@@ -86,3 +86,19 @@ src/
 │   └── FadeIn.tsx       # Wrapper de animación de entrada
 └── index.scss           # Reset global + design tokens
 ```
+
+## Contacto (Formspree)
+
+El formulario de contacto ahora envía las entradas a Formspree usando el formulario con ID `maqlrzee`.
+
+- ¿Llega a Gmail?: Sí — Formspree reenvía las sumisiones al correo que tengas verificado en tu cuenta. Asegurate de haber verificado tu email en el dashboard de Formspree y de tener activadas las notificaciones por email para el formulario.
+- Prueba rápida desde terminal:
+
+```bash
+curl -X POST https://formspree.io/f/maqlrzee \
+  -H "Accept: application/json" \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Prueba","email":"test@example.com","message":"hola"}'
+```
+
+- Nota: esta integración no requiere servidor (no expone keys). Si más adelante querés mayor control (plantillas, logs, protección avanzada), podés usar una función serverless con MailerSend o similar.
