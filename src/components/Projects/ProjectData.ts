@@ -37,7 +37,7 @@ const projectData: IProject[] = [
   },
   {
     id: 3,
-    link: 'https://github.com/patricio1984/analizador-de-imagenes',
+    link: 'https://analizadordeimagenes.netlify.app/',
     image: project13,
     alt: 'Captura de pantalla del Analizador de Imágenes',
     title: 'Animal Classifier — Clasificador de imágenes con IA',
