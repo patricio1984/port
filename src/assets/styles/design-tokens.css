@@ -1,0 +1,282 @@
+/* ============================================================
+   DESIGN TOKENS — Cinematic Dark Portfolio
+   Reference: Lusion / Active Theory / Bruno Simon
+   Scope: CSS Custom Properties (dark-first, fluid, motion-rich)
+   ============================================================ */
+
+:root {
+
+  /* ------------------------------------------------------------------
+     PRIMITIVES — raw values, never use directly in components
+     ------------------------------------------------------------------ */
+
+  /* Blacks — deep, intentional, not flat */
+  --_black-0:    #0a0a0a;   /* true void */
+  --_black-1:    #0f0f0f;
+  --_black-2:    #111111;   /* base background */
+  --_black-3:    #161616;
+  --_black-4:    #1c1c1e;   /* elevated surface */
+  --_black-5:    #242424;
+  --_black-6:    #2e2e2e;   /* border / divider */
+
+  /* Violet / Electric — the signature accent */
+  --_violet-1:   #3b0764;   /* deepest, for glows */
+  --_violet-2:   #4c0a84;
+  --_violet-3:   #6419b8;
+  --_violet-4:   #7c3aed;   /* primary accent */
+  --_violet-5:   #8b5cf6;
+  --_violet-6:   #a78bfa;   /* light, for text on dark */
+  --_violet-7:   #c4b5fd;   /* hover states */
+  --_violet-8:   #ede9fe;   /* near-white tint */
+
+  /* Warm Neutral — counterbalances the cold tech */
+  --_warm-1:     #2a1f14;   /* deep warm bg */
+  --_warm-2:     #4a3728;
+  --_warm-3:     #8a7060;
+  --_warm-4:     #c4a882;   /* warm mid */
+  --_warm-5:     #e2cbb6;
+  --_warm-6:     #f0e0ce;
+  --_warm-7:     #f8f0e8;   /* near-white warm */
+
+  /* Neutrals */
+  --_neutral-0:  #fafafa;
+  --_neutral-1:  #f4f4f5;
+  --_neutral-2:  #e4e4e7;
+  --_neutral-3:  #a1a1aa;
+  --_neutral-4:  #71717a;
+  --_neutral-5:  #3f3f46;
+
+  /* ------------------------------------------------------------------
+     TYPOGRAPHY
+     All sizes: fluid clamp() — min @ 320px, max @ 1440px viewport.
+     Formula: clamp(min, [vi + vw], max)
+     ------------------------------------------------------------------ */
+
+  /* Font families */
+  /* Fraunces: humanist variable serif — premium on dark, supports wght 100-900 + optical size */
+  --font-display:   'Fraunces', 'Georgia', serif;
+  --font-sans:      'Inter',    system-ui, -apple-system, sans-serif;
+  --font-mono:      'Fira Code', 'Fira Mono', 'Menlo', monospace;
+
+  /* Font weights — named, not magic numbers */
+  --weight-light:    300;
+  --weight-regular:  400;
+  --weight-medium:   500;
+  --weight-semibold: 600;
+  --weight-bold:     700;
+  --weight-black:    900;
+
+  /* Fluid type scale — augmented fourth (×1.414) base ratio */
+  --text-2xs:   clamp(0.64rem,  0.55rem + 0.22vw,  0.75rem);  /* 10–12px  */
+  --text-xs:    clamp(0.75rem,  0.65rem + 0.28vw,  0.875rem); /* 12–14px  */
+  --text-sm:    clamp(0.875rem, 0.80rem + 0.35vw,  1rem);     /* 14–16px  */
+  --text-base:  clamp(1rem,     0.93rem + 0.42vw,  1.125rem); /* 16–18px  */
+  --text-md:    clamp(1.125rem, 0.98rem + 0.7vw,   1.5rem);   /* 18–24px  */
+  --text-lg:    clamp(1.375rem, 1.1rem  + 1.4vw,   2.125rem); /* 22–34px  */
+  --text-xl:    clamp(1.75rem,  1.3rem  + 2.25vw,  3.25rem);  /* 28–52px  */
+  --text-2xl:   clamp(2.25rem,  1.5rem  + 3.75vw,  5rem);     /* 36–80px  */
+  --text-3xl:   clamp(3rem,     1.8rem  + 6vw,     7.5rem);   /* 48–120px */
+  --text-hero:  clamp(3.75rem,  1.5rem  + 9vw,     10rem);    /* 60–160px */
+
+  /* Optical sizing */
+  --tracking-tight:    -0.04em; /* large display text */
+  --tracking-normal:   -0.01em;
+  --tracking-wide:      0.04em; /* labels, caps */
+  --tracking-widest:    0.12em; /* eyebrow / badges */
+
+  --leading-none:    1;
+  --leading-tight:   1.1;   /* display headings */
+  --leading-snug:    1.25;  /* subheadings */
+  --leading-normal:  1.45;  /* body text */
+  --leading-relaxed: 1.65;  /* long-form reading */
+
+  /* ------------------------------------------------------------------
+     MOTION SYSTEM
+     Named after real easing categories, not "ease-in-out"
+     ------------------------------------------------------------------ */
+
+  /* Easing curves — cinematically precise */
+  --ease-out-expo:    cubic-bezier(0.16, 1,    0.3,  1);     /* default UI motion — snappy landing    */
+  --ease-out-quart:   cubic-bezier(0.25, 1,    0.5,  1);     /* gentle deceleration                   */
+  --ease-in-expo:     cubic-bezier(0.7,  0,    0.84, 0);     /* elements exiting screen               */
+  --ease-in-out-quint:cubic-bezier(0.86, 0,    0.07, 1);     /* full screen transitions               */
+  --ease-in-out-circ: cubic-bezier(0.85, 0,    0.15, 1);     /* page wipes, heavy reveals             */
+  --ease-out-back:    cubic-bezier(0.34, 1.56, 0.64, 1);     /* playful overshoot — badges, tooltips  */
+  --ease-spring:      cubic-bezier(0.37, 1.61, 0.57, 0.9);   /* magnetic / physics feel               */
+  --ease-linear:      linear;                                 /* progress bars, counters               */
+
+  /* Duration tokens */
+  --duration-instant:  80ms;
+  --duration-fast:     160ms;
+  --duration-base:     300ms;
+  --duration-moderate: 500ms;
+  --duration-slow:     800ms;
+  --duration-slower:   1100ms;
+  --duration-cinematic:1600ms;  /* hero reveals, page transitions */
+
+  /* Stagger tokens — for sequential element reveals */
+  --stagger-xs:  40ms;
+  --stagger-sm:  80ms;
+  --stagger-md:  120ms;
+  --stagger-lg:  200ms;
+
+  /* ------------------------------------------------------------------
+     SPACING — 4px base grid, named scale
+     ------------------------------------------------------------------ */
+
+  --space-1:    0.25rem;   /*  4px */
+  --space-2:    0.5rem;    /*  8px */
+  --space-3:    0.75rem;   /* 12px */
+  --space-4:    1rem;      /* 16px */
+  --space-5:    1.5rem;    /* 24px */
+  --space-6:    2rem;      /* 32px */
+  --space-7:    3rem;      /* 48px */
+  --space-8:    4rem;      /* 64px */
+  --space-9:    6rem;      /* 96px */
+  --space-10:   8rem;      /* 128px */
+  --space-11:   12rem;     /* 192px */
+
+  /* Fluid section padding */
+  --section-y: clamp(4rem, 8vw, 10rem);
+  --section-x: clamp(1.5rem, 8vw, 10rem);
+
+  /* ------------------------------------------------------------------
+     BORDER RADIUS
+     ------------------------------------------------------------------ */
+
+  --radius-sm:   4px;
+  --radius-md:   8px;
+  --radius-lg:   16px;
+  --radius-xl:   24px;
+  --radius-pill: 9999px;
+
+  /* ------------------------------------------------------------------
+     Z-INDEX — named layers, never magic numbers in components
+     ------------------------------------------------------------------ */
+
+  --z-below:     -1;
+  --z-base:       1;
+  --z-raised:    10;
+  --z-dropdown:  20;
+  --z-sticky:    30;
+  --z-overlay:   40;
+  --z-drawer:    50;
+  --z-modal:     60;
+  --z-toast:     70;
+  --z-tooltip:   80;
+  --z-cursor:    90;
+  --z-max:     9999;
+
+  /* ------------------------------------------------------------------
+     SHADOWS — layered, cinematic depth
+     ------------------------------------------------------------------ */
+
+  --shadow-sm:
+    0 1px 2px rgba(0, 0, 0, 0.5),
+    0 1px 4px rgba(0, 0, 0, 0.25);
+
+  --shadow-md:
+    0 2px 8px  rgba(0, 0, 0, 0.5),
+    0 4px 16px rgba(0, 0, 0, 0.35);
+
+  --shadow-lg:
+    0 4px 16px  rgba(0, 0, 0, 0.55),
+    0 12px 40px rgba(0, 0, 0, 0.4);
+
+  --shadow-xl:
+    0 8px 40px  rgba(0, 0, 0, 0.6),
+    0 24px 80px rgba(0, 0, 0, 0.45);
+
+  /* Violet glow — use on accent elements */
+  --shadow-glow-sm:  0 0 16px rgba(124, 58, 237, 0.35);
+  --shadow-glow-md:  0 0 32px rgba(124, 58, 237, 0.4), 0 0 64px rgba(124, 58, 237, 0.15);
+  --shadow-glow-lg:  0 0 60px rgba(124, 58, 237, 0.5), 0 0 120px rgba(124, 58, 237, 0.2);
+
+  /* ------------------------------------------------------------------
+     BORDERS
+     ------------------------------------------------------------------ */
+
+  --border-subtle:  1px solid rgba(255, 255, 255, 0.06);
+  --border-default: 1px solid rgba(255, 255, 255, 0.10);
+  --border-strong:  1px solid rgba(255, 255, 255, 0.20);
+  --border-accent:  1px solid var(--_violet-4);
+
+}
+
+/* ====================================================================
+   SEMANTIC TOKENS — dark mode (default — dark-first)
+   Maps to .dark-mode class used in App.tsx
+   ==================================================================== */
+
+.dark-mode,
+:root {
+  /* Backgrounds */
+  --bg-base:       var(--_black-2);    /* primary bg           */
+  --bg-subtle:     var(--_black-3);    /* slightly lifted      */
+  --bg-surface:    var(--_black-4);    /* cards, panels        */
+  --bg-overlay:    rgba(10, 10, 10, 0.85); /* modals backdrop  */
+
+  /* Text */
+  --text-primary:  var(--_neutral-0);
+  --text-secondary:var(--_neutral-3);
+  --text-tertiary: var(--_neutral-4);
+  --text-disabled: var(--_neutral-5);
+  --text-accent:   var(--_violet-6);
+  --text-warm:     var(--_warm-5);
+
+  /* Interactive */
+  --accent:           var(--_violet-4);
+  --accent-hover:     var(--_violet-5);
+  --accent-active:    var(--_violet-3);
+  --accent-subtle:    rgba(124, 58, 237, 0.12);
+  --accent-subtle-hover: rgba(124, 58, 237, 0.22);
+
+  /* Borders */
+  --border:        rgba(255, 255, 255, 0.07);
+  --border-hover:  rgba(255, 255, 255, 0.14);
+}
+
+/* ====================================================================
+   SEMANTIC TOKENS — light mode
+   Maps to .light-mode class used in App.tsx
+   ==================================================================== */
+
+.light-mode {
+  /* Backgrounds */
+  --bg-base:       var(--_warm-7);
+  --bg-subtle:     var(--_warm-6);
+  --bg-surface:    #ffffff;
+  --bg-overlay:    rgba(248, 240, 232, 0.9);
+
+  /* Text */
+  --text-primary:  var(--_black-2);
+  --text-secondary:var(--_neutral-4);
+  --text-tertiary: var(--_neutral-3);
+  --text-disabled: var(--_neutral-2);
+  --text-accent:   var(--_violet-4);
+  --text-warm:     var(--_warm-2);
+
+  /* Interactive */
+  --accent:           var(--_violet-4);
+  --accent-hover:     var(--_violet-3);
+  --accent-active:    var(--_violet-2);
+  --accent-subtle:    rgba(124, 58, 237, 0.08);
+  --accent-subtle-hover: rgba(124, 58, 237, 0.15);
+
+  /* Borders */
+  --border:        rgba(0, 0, 0, 0.08);
+  --border-hover:  rgba(0, 0, 0, 0.16);
+
+  /* Light-mode shadows — softer */
+  --shadow-sm:
+    0 1px 3px  rgba(0, 0, 0, 0.08),
+    0 1px 6px  rgba(0, 0, 0, 0.05);
+
+  --shadow-md:
+    0 2px 8px  rgba(0, 0, 0, 0.1),
+    0 4px 16px rgba(0, 0, 0, 0.07);
+
+  --shadow-lg:
+    0 4px 16px  rgba(0, 0, 0, 0.12),
+    0 12px 40px rgba(0, 0, 0, 0.08);
+}

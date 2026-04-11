@@ -1,0 +1,317 @@
+/* ============================================================
+   NAVIGATION — Floating glass header
+   Design system: dark-first, design-tokens.css variables.
+   No MUI. No box-shadow on compositing boundary.
+   ============================================================ */
+
+// ── Token shorthands (all defined in design-tokens.css) ──────────────────────
+// --section-x, --font-display, --font-sans, --font-mono
+// --text-xs, --text-md, --text-xl, --text-2xs
+// --weight-bold, --weight-medium, --weight-regular
+// --tracking-tight, --tracking-wide, --tracking-widest, --tracking-normal
+// --_violet-4, --_violet-5, --_neutral-0, --_neutral-3, --_neutral-4, --_black-1
+// --duration-base, --duration-moderate, --ease-out-expo
+
+$nav-h: 64px;
+$bp-mobile: 768px;
+
+// ─── Fixed bar ───────────────────────────────────────────────────────────────
+.nav {
+  position: fixed;
+  inset-block-start: 0;
+  inset-inline:      0;
+  height:            $nav-h;
+  z-index:           80; // below cursor(90) & grain(97) but above content
+  background:        transparent;
+  transition:
+    background var(--duration-base) var(--ease-out-expo),
+    border-color var(--duration-base) var(--ease-out-expo);
+
+  // ── Glass effect on scroll ─────────────────────────────────────────────────
+  &--scrolled {
+    background:           rgba(11, 11, 11, 0.70);
+    backdrop-filter:      blur(20px) saturate(160%);
+    -webkit-backdrop-filter: blur(20px) saturate(160%);
+    border-bottom:        1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  // ── When mobile overlay is open — keep bar transparent ────────────────────
+  &--open {
+    background:              transparent !important;
+    backdrop-filter:         none !important;
+    -webkit-backdrop-filter: none !important;
+    border-bottom-color:     transparent !important;
+  }
+}
+
+// ─── Inner layout ─────────────────────────────────────────────────────────────
+.nav__inner {
+  display:         flex;
+  align-items:     center;
+  justify-content: space-between;
+  height:          100%;
+  padding-inline:  var(--section-x);
+}
+
+// ─── Logo ─────────────────────────────────────────────────────────────────────
+.nav__logo {
+  background: none;
+  border:     none;
+  padding:    0;
+  cursor:     none; // custom cursor handles pointer
+  line-height: 1;
+  flex-shrink: 0;
+
+  &-text {
+    font-family:    var(--font-display);
+    font-size:      var(--text-md);
+    font-weight:    var(--weight-bold);
+    letter-spacing: var(--tracking-tight);
+    color:          var(--_neutral-0);
+    transition:     opacity var(--duration-base) var(--ease-out-expo);
+  }
+
+  &:hover &-text { opacity: 0.65; }
+}
+
+.nav__logo-dot { color: var(--_violet-5); }
+
+// ─── Desktop links ────────────────────────────────────────────────────────────
+.nav__links {
+  display:     flex;
+  align-items: center;
+  gap:         var(--space-1);
+
+  @media (max-width: $bp-mobile) { display: none; }
+}
+
+.nav__link {
+  background:     none;
+  border:         none;
+  cursor:         none;
+  font-family:    var(--font-sans);
+  font-size:      var(--text-xs);
+  font-weight:    var(--weight-medium);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color:          var(--_neutral-3);
+  padding:        0.45em 1em;
+  position:       relative;
+  transition:     color var(--duration-base) var(--ease-out-expo);
+
+  // Underline indicator ─ reveal on hover / active
+  &::after {
+    content:          '';
+    position:         absolute;
+    inset-inline:     1em;
+    bottom:           0.1em;
+    height:           1px;
+    background:       var(--_violet-5);
+    transform:        scaleX(0);
+    transform-origin: right;
+    transition:       transform var(--duration-base) var(--ease-out-expo);
+  }
+
+  &:hover {
+    color: var(--_neutral-0);
+    &::after {
+      transform:        scaleX(1);
+      transform-origin: left;
+    }
+  }
+
+  &--active {
+    color: var(--_neutral-0);
+    &::after {
+      transform:  scaleX(1);
+      background: var(--_violet-4);
+    }
+  }
+}
+
+// ─── Controls ─────────────────────────────────────────────────────────────────
+.nav__controls {
+  display:     flex;
+  align-items: center;
+  gap:         var(--space-2);
+  flex-shrink: 0;
+}
+
+.nav__icon-btn {
+  display:         flex;
+  align-items:     center;
+  justify-content: center;
+  width:           36px;
+  height:          36px;
+  border-radius:   50%;
+  background:      none;
+  border:          none;
+  cursor:          none;
+  color:           var(--_neutral-3);
+  transition:
+    color       var(--duration-base) var(--ease-out-expo),
+    background  var(--duration-base) var(--ease-out-expo);
+
+  &:hover {
+    color:      var(--_neutral-0);
+    background: rgba(255, 255, 255, 0.07);
+  }
+}
+
+// ─── Hamburger ────────────────────────────────────────────────────────────────
+.nav__burger {
+  display:         none;
+  flex-direction:  column;
+  justify-content: center;
+  gap:             6px;
+  width:           36px;
+  height:          36px;
+  padding:         8px;
+  background:      none;
+  border:          none;
+  cursor:          none;
+
+  @media (max-width: $bp-mobile) { display: flex; }
+}
+
+.nav__burger-bar {
+  display:          block;
+  width:            100%;
+  height:           1.5px;
+  background:       var(--_neutral-0);
+  border-radius:    2px;
+  transform-origin: center;
+  transition:
+    transform var(--duration-base) var(--ease-out-expo),
+    opacity   var(--duration-base) var(--ease-out-expo);
+}
+
+// Morph bars into × when open
+.nav--open {
+  .nav__burger-bar:nth-child(1) {
+    transform: translateY(3.75px) rotate(45deg);
+  }
+  .nav__burger-bar:nth-child(2) {
+    transform: translateY(-3.75px) rotate(-45deg);
+  }
+}
+
+// ─── Full-screen mobile overlay ───────────────────────────────────────────────
+.nav__overlay {
+  position:        fixed;
+  inset:           0;
+  z-index:         75; // below .nav (80) — so the bar sits on top
+  background:      var(--_black-1);
+  display:         flex;
+  flex-direction:  column;
+  justify-content: center;
+  padding:         $nav-h var(--section-x) var(--space-6);
+  pointer-events:  none;
+  opacity:         0;
+  transform:       translateY(-6px);
+  transition:
+    opacity   var(--duration-moderate) var(--ease-out-expo),
+    transform var(--duration-moderate) var(--ease-out-expo);
+
+  &--open {
+    opacity:        1;
+    transform:      translateY(0);
+    pointer-events: auto;
+  }
+
+  // Stacked nav links ─────────────────────────────────────────────────────────
+  nav {
+    display:        flex;
+    flex-direction: column;
+    gap:            0;
+  }
+}
+
+.nav__overlay-link {
+  display:        flex;
+  align-items:    baseline;
+  gap:            1.25rem;
+  background:     none;
+  border:         none;
+  border-bottom:  1px solid rgba(255, 255, 255, 0.06);
+  padding:        clamp(0.9rem, 2.5vw, 1.35rem) 0;
+  width:          100%;
+  text-align:     left;
+  cursor:         none;
+
+  // Start offscreen — animate in when overlay opens
+  opacity:        0;
+  transform:      translateY(14px);
+  transition:
+    color     var(--duration-base) var(--ease-out-expo),
+    opacity   calc(var(--duration-moderate) + var(--i, 0) * 50ms) var(--ease-out-expo),
+    transform calc(var(--duration-moderate) + var(--i, 0) * 50ms) var(--ease-out-expo);
+
+  .nav__overlay--open & {
+    opacity:   1;
+    transform: translateY(0);
+  }
+
+  &:hover .nav__overlay-label { color: var(--_neutral-0); }
+}
+
+.nav__overlay-num {
+  font-family:    var(--font-mono);
+  font-size:      var(--text-2xs);
+  font-weight:    var(--weight-regular);
+  letter-spacing: var(--tracking-widest);
+  color:          var(--_violet-5);
+  flex-shrink:    0;
+}
+
+.nav__overlay-label {
+  font-family:    var(--font-display);
+  font-size:      var(--text-xl);
+  font-weight:    var(--weight-bold);
+  letter-spacing: var(--tracking-tight);
+  color:          rgba(255, 255, 255, 0.22);
+  transition:     color var(--duration-base) var(--ease-out-expo);
+}
+
+.nav__overlay-footer {
+  position: absolute;
+  bottom:   var(--space-6);
+  left:     var(--section-x);
+
+  span {
+    font-family:    var(--font-mono);
+    font-size:      var(--text-2xs);
+    letter-spacing: var(--tracking-widest);
+    text-transform: uppercase;
+    color:          var(--_neutral-4);
+  }
+}
+
+// ─── Light-mode overrides ─────────────────────────────────────────────────────
+.light-mode {
+  .nav--scrolled {
+    background:           rgba(248, 240, 232, 0.80);
+    backdrop-filter:      blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border-bottom:        1px solid rgba(0, 0, 0, 0.07);
+  }
+
+  .nav__logo-text    { color: var(--_black-2); }
+  .nav__logo-dot     { color: var(--_violet-4); }
+  .nav__link         { color: var(--_neutral-4); }
+  .nav__link:hover,
+  .nav__link--active { color: var(--_black-2); }
+  .nav__icon-btn     { color: var(--_neutral-4); }
+
+  .nav__icon-btn:hover {
+    color:      var(--_black-2);
+    background: rgba(0, 0, 0, 0.06);
+  }
+
+  .nav__burger-bar   { background: var(--_black-2); }
+  .nav__overlay      { background: var(--_warm-6); }
+
+  .nav__overlay-label { color: rgba(0, 0, 0, 0.15); }
+  .nav__overlay-link:hover .nav__overlay-label { color: var(--_black-2); }
+  .nav__overlay-footer span { color: var(--_neutral-3); }
+}

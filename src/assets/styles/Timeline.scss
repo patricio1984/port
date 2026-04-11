@@ -1,38 +1,311 @@
-.vertical-timeline span {
-    color: white;
-    font-family: 'Courier Prime', monospace;
+// ─── Timeline — horizontal scroll on desktop, vertical editorial on mobile ──────────────
+// Animation: GSAP ScrollTrigger pin+scrub (desktop, no prefers-reduced-motion)
+// Fallback:  static vertical stack (mobile, reduced-motion, JS disabled)
+
+
+// ─── Section —–—–—–—–—–—–—–—–—–—–—–—–—–—–—–—–—–—–—–—–—–—–—–—–—–—–—–—–—–—–—–
+.tl-section {
+  position:   relative;
+  overflow:   hidden;
+  background: var(--bg-base, #111);
+  // Height is set to 100vh by GSAP pin; we mirror it here so there
+  // is no layout shift before JS runs
+  height: 100vh;
+
+  // Reduced-motion & mobile: auto height
+  @media (max-width: 899px),
+    (prefers-reduced-motion: reduce) {
+    height: auto;
+    overflow: visible;
+  }
 }
 
-.vertical-timeline p {
-    color: rgb(39, 40, 34);
+
+// ─── Section heading (visible on mobile, sr-only on desktop) ──────────────────
+.tl-heading {
+  font-family:  var(--font-display);
+  font-size:    var(--text-xl);
+  font-weight:  700;
+  font-variation-settings: 'wght' 700, 'opsz' 36;
+  color:        var(--text-primary);
+  letter-spacing: var(--tracking-tight);
+  margin:       0;
+  padding:      clamp(3rem, 6vw, 5rem) clamp(1.5rem, 7vw, 5rem) 0;
+
+  // Hidden on desktop — content is self-labelled via aria / panel headings
+  @media (min-width: 900px) {
+    // sr-only technique: still readable by screen-readers
+    position: absolute;
+    width: 1px; height: 1px;
+    padding: 0; margin: -1px;
+    overflow: hidden;
+    clip: rect(0,0,0,0);
+    white-space: nowrap;
+    border: 0;
+  }
 }
 
-.vertical-timeline-element p {
-    color: rgb(39, 40, 34);
+
+// ─── Track (scrolls horizontally via GSAP on desktop) ──────────────────────
+.tl-track {
+  display:          flex;
+  flex-direction:   row;
+  will-change:      transform; // hint for GPU compositing during GSAP animate
+
+  // Mobile & reduced-motion: vertical stack
+  @media (max-width: 899px),
+    (prefers-reduced-motion: reduce) {
+    flex-direction: column;
+    will-change:    auto;
+    transform:      none !important; // override any lingering GSAP inline
+  }
 }
 
-.vertical-timeline-element h3 {
-    color: rgb(39, 40, 34);
+
+// ─── Panel ────────────────────────────────────────────────────────────
+.tl-panel {
+  // Desktop: each panel fills the viewport completely
+  // 100vw puede incluir el ancho del scrollbar y generar overflow de ~15px;
+  // max-width: 100% lo contiene sin romper la animacion GSAP.
+  flex:            0 0 100vw;
+  width:           100vw;
+  max-width:       100%;
+  height:          100vh;
+  position:        relative;
+  overflow:        hidden;
+  display:         flex;
+  flex-direction:  column;
+  justify-content: flex-end;   // body anchored to bottom 1/3
+  box-sizing:      border-box;
+
+  // Focus ring for keyboard users (replaces outline that's hidden below)
+  outline: none;
+  &:focus-visible {
+    box-shadow: inset 0 0 0 2px var(--text-accent);
+  }
+
+  // —— Hover / focus-within: elevate border + reveal details
+  &:hover,
+  &:focus-within {
+    .tl-panel__achievements { opacity: 1; transform: translateY(0); }
+    .tl-panel__reveal-hint  { opacity: 0; }
+    .tl-panel__line { transform: scaleX(1); }
+
+    // Year watermark very slightly brightens
+    .tl-panel__year-bg { opacity: 0.065; }
+  }
+
+  // Mobile & reduced-motion overrides
+  @media (max-width: 899px),
+    (prefers-reduced-motion: reduce) {
+    flex:    none;
+    width:   100%;
+    height:  auto;
+    min-height: 0;
+    padding: clamp(2.5rem, 5vw, 4rem)  clamp(1.5rem, 7vw, 5rem);
+    border-bottom: 1px solid var(--border);
+
+    &:last-child { border-bottom: none; }
+
+    // Always show achievements on mobile
+    .tl-panel__achievements { opacity: 1; transform: none !important; }
+    .tl-panel__reveal-hint  { display: none; }
+    .tl-panel__line         { transform: scaleX(1) !important; }
+  }
 }
 
-.vertical-timeline-element h4 {
-    color: rgb(39, 40, 34);
+
+// ─── Watermark year ──────────────────────────────────────────────────────
+.tl-panel__year-bg {
+  position:    absolute;
+  // Centered vertically, bleeds left
+  top:         50%;
+  left:        -0.05em;
+  transform:   translateY(-50%);
+  // Will be overridden by GSAP parallax (translateX)
+
+  font-family:  var(--font-display);
+  font-size:    clamp(18rem, 35vw, 32rem);
+  font-weight:  800;
+  font-variation-settings: 'wght' 800, 'opsz' 144;
+  line-height:  1;
+  letter-spacing: -0.06em;
+
+  color:          var(--text-primary);
+  opacity:        0.045;
+
+  pointer-events: none;
+  user-select:    none;
+  white-space:    nowrap;
+
+  transition: opacity var(--duration-base, 0.4s) var(--ease-out-expo);
+
+  @media (max-width: 899px) {
+    font-size: clamp(8rem, 30vw, 14rem);
+    top: 0;
+    transform: none;
+    opacity: 0.04;
+  }
 }
 
-.vertical-timeline-element span {
-    color: rgb(39, 40, 34);
+
+// ─── Counter top-right  e.g. "01 / 02" ────────────────────────────────
+.tl-panel__count {
+  position:    absolute;
+  top:         clamp(2rem, 3.5vw, 3rem);
+  right:       clamp(1.5rem, 4vw, 3.5rem);
+
+  font-family:    var(--font-mono);
+  font-size:      var(--text-xs);
+  letter-spacing: var(--tracking-widest);
+  color:          var(--text-tertiary);
+  display:        flex;
+  align-items:    center;
+  gap:            var(--space-2);
 }
 
-.vertical-timeline-element .vertical-timeline-element-date {
-    color: white;
+.tl-panel__count-sep {
+  color:     var(--text-disabled);
+  font-size: 0.75em;
 }
 
-.svg-inline--fa {
-    color: white;
+
+// ─── Body content (pinned to bottom-left quadrant on desktop) ──────────────
+.tl-panel__body {
+  position: relative;  // above watermark z-ordering is fine, both non-stacking
+  z-index:  1;
+  padding: 0 clamp(1.5rem, 7vw, 5rem) clamp(3rem, 5vw, 5rem);
+  max-width: 68ch;
+
+  @media (max-width: 899px) {
+    padding:   0;
+    max-width: none;
+  }
 }
 
-@media screen and (max-width: 1170px) {
-    .vertical-timeline-element .vertical-timeline-element-date {
-        color: rgb(39, 40, 34);
-    }
+
+// ─── Meta row: date + type badge ───────────────────────────────────────
+.tl-panel__meta {
+  display:     flex;
+  align-items: center;
+  gap:         var(--space-3);
+  margin-bottom: var(--space-4);
+}
+
+.tl-panel__period {
+  font-family:    var(--font-mono);
+  font-size:      var(--text-xs);
+  letter-spacing: var(--tracking-wide);
+  color:          var(--text-accent);
+  margin:         0;
+}
+
+.tl-panel__type {
+  font-family:    var(--font-mono);
+  font-size:      var(--text-2xs);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-widest);
+  color:          var(--text-tertiary);
+  border:         1px solid var(--border);
+  padding:        2px var(--space-2);
+  border-radius:  2px;
+}
+
+
+// ─── Role title — Fraunces variable, editorial large ─────────────────────
+.tl-panel__role {
+  font-family:  var(--font-display);
+  font-size:    var(--text-2xl);
+  font-weight:  700;
+  font-variation-settings: 'wght' 700, 'opsz' 64;
+  line-height:  var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+  color:        var(--text-primary);
+  margin:       0 0 var(--space-3);
+
+  -webkit-font-smoothing: antialiased;
+}
+
+
+// ─── Company + location ────────────────────────────────────────────
+.tl-panel__company {
+  font-family:  var(--font-sans);
+  font-size:    var(--text-base);
+  font-weight:  600;
+  color:        var(--text-secondary);
+  margin:       0 0 var(--space-5);
+
+  strong {
+    color:       var(--text-primary);
+    font-weight: 600;
+  }
+}
+
+.tl-panel__sep    { color: var(--text-disabled); }
+.tl-panel__location { font-weight: 400; }
+
+
+// ─── Achievements — hidden on desktop, revealed via hover/focus ─────────
+.tl-panel__achievements {
+  list-style:  none;
+  padding:     0;
+  margin:      0;
+
+  // Desktop: initially hidden, slides up on hover
+  opacity:   0;
+  transform: translateY(10px);
+  transition:
+    opacity   var(--duration-base, 0.4s)    var(--ease-out-expo),
+    transform var(--duration-base, 0.4s)    var(--ease-out-expo);
+}
+
+.tl-panel__achievement {
+  font-family:  var(--font-sans);
+  font-size:    var(--text-sm);
+  font-weight:  400;
+  line-height:  var(--leading-relaxed);
+  color:        var(--text-secondary);
+  padding:      var(--space-1) 0;
+  // Mono slash instead of bullet
+  &::before {
+    content:        '— ';
+    font-family:    var(--font-mono);
+    color:          var(--text-accent);
+    font-size:      0.85em;
+  }
+}
+
+
+// ─── "hover · focus" hint — fades out when achievements appear ───────
+.tl-panel__reveal-hint {
+  font-family:    var(--font-mono);
+  font-size:      var(--text-2xs);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-widest);
+  color:          var(--text-disabled);
+  margin-top:     var(--space-3);
+
+  transition: opacity var(--duration-fast, 0.2s) var(--ease-out-expo);
+}
+
+
+// ─── Bottom line — slides in on hover ────────────────────────────────
+.tl-panel__line {
+  position:         absolute;
+  bottom:           0;
+  left:             0;
+  right:            0;
+  height:           2px;
+  background:       var(--text-accent);
+  transform:        scaleX(0);
+  transform-origin: left;
+  transition:       transform var(--duration-base, 0.4s) var(--ease-out-expo);
+}
+
+
+// ─── Light mode overrides ────────────────────────────────────────────
+.light-mode {
+  .tl-panel__year-bg { opacity: 0.035; }
+  .tl-panel:hover .tl-panel__year-bg,
+  .tl-panel:focus-within .tl-panel__year-bg { opacity: 0.055; }
 }

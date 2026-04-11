@@ -1,21 +1,128 @@
-footer {
-    text-align: center;
-    padding-top: 50px;
-    padding-bottom: 50px;
+/* ============================================================
+   FOOTER — Minimal editorial strip
+   Design system: dark-first, design-tokens.css variables.
+   No MUI. No hardcoded colors.
+   ============================================================ */
 
-    svg {
-        width: 1.1em !important;
-        height: 1.1em !important;
-        margin-right: 10px;
-    }
-
-    p {
-        font-size: 0.8em;
-    }
+.footer {
+  background:    var(--bg-base);
+  padding-block: 0 clamp(2rem, 4vw, 3.5rem);
 }
 
-@media screen and (max-width: 768px) {
-    footer {
-        padding: 5% 5%;
+// ── Hairline divider — gradient fade in/out ──────────────────────────────────
+.footer__rule {
+  height:     1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--border) 20%,
+    var(--border) 80%,
+    transparent 100%
+  );
+  margin-bottom: clamp(2rem, 4vw, 3.5rem);
+}
+
+// ── Inner three-column layout ────────────────────────────────────────────────
+.footer__inner {
+  display:         flex;
+  align-items:     center;
+  justify-content: space-between;
+  padding-inline:  var(--section-x);
+  gap:             var(--space-5);
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+    align-items:    center;
+    text-align:     center;
+    gap:            var(--space-4);
+  }
+}
+
+// ── Brand logotype ────────────────────────────────────────────────────────────
+.footer__brand {
+  font-family:    var(--font-display);
+  font-size:      var(--text-md);
+  font-weight:    var(--weight-bold);
+  font-variation-settings: 'wght' 700, 'opsz' 18;
+  letter-spacing: var(--tracking-tight);
+  color:          var(--text-secondary);
+  margin:         0;
+  flex-shrink:    0;
+}
+
+.footer__brand-dot { color: var(--_violet-5); }
+
+// ── Credit line ───────────────────────────────────────────────────────────────
+.footer__credit {
+  font-family:    var(--font-mono);
+  font-size:      var(--text-2xs);
+  font-weight:    var(--weight-regular);
+  letter-spacing: var(--tracking-wide);
+  color:          var(--text-tertiary);
+  margin:         0;
+  text-align:     center;
+}
+
+.footer__link {
+  color:      var(--_violet-6);
+  position:   relative;
+  transition: color var(--duration-base) var(--ease-out-expo);
+
+  // Underline — grows from left on hover
+  &::after {
+    content:          '';
+    position:         absolute;
+    inset-inline:     0;
+    bottom:           -1px;
+    height:           1px;
+    background:       var(--_violet-5);
+    transform:        scaleX(0);
+    transform-origin: right;
+    transition:       transform var(--duration-base) var(--ease-out-expo);
+  }
+
+  &:hover {
+    color: var(--_violet-7);
+    &::after {
+      transform:        scaleX(1);
+      transform-origin: left;
     }
+  }
+}
+
+// ── Social icons ──────────────────────────────────────────────────────────────
+.footer__social {
+  display:     flex;
+  align-items: center;
+  gap:         var(--space-3);
+  flex-shrink: 0;
+}
+
+.footer__social-link {
+  display:         flex;
+  align-items:     center;
+  justify-content: center;
+  width:           34px;
+  height:          34px;
+  border-radius:   50%;
+  color:           var(--text-tertiary);
+  border:          1px solid var(--border);
+  transition:
+    color       var(--duration-base) var(--ease-out-expo),
+    border-color var(--duration-base) var(--ease-out-expo),
+    transform   var(--duration-base) var(--ease-out-back);
+
+  &:hover {
+    color:        var(--_violet-6);
+    border-color: var(--_violet-4);
+    transform:    translateY(-3px);
+  }
+
+  svg { display: block; }
+}
+
+// ── Light-mode overrides ──────────────────────────────────────────────────────
+.light-mode {
+  .footer__brand  { color: var(--text-tertiary); }
+  .footer__credit { color: var(--text-tertiary); }
 }

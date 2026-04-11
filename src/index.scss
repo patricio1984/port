@@ -6,6 +6,31 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-size: 1.1rem !important;
+  // Evita scroll horizontal por animaciones de marquee u otros elementos desbordantes
+  overflow-x: hidden;
+}
+
+html {
+  // overflow-x en html es necesario además del body —
+  // sin esto el blanco del root se filtra por el costado derecho
+  overflow-x: hidden;
+  background: #111111;
+  box-sizing: border-box;
+}
+
+// ─── Custom cursor: hide default on pointer-fine devices ─────────────────────
+// The JS component already guards against coarse / reduced-motion;
+// this CSS rule only applies when fine pointer is available.
+@media (pointer: fine) {
+  *,
+  *::before,
+  *::after { cursor: none !important; }
+
+  // Text fields get the native I-beam — it communicates position
+  // and selectability better than any custom cursor can.
+  input,
+  textarea,
+  [contenteditable="true"] { cursor: text !important; }
 }
 
 code {
@@ -21,11 +46,12 @@ code {
 
 a {
   text-decoration: none;
+  /* transición en estado base para que anime en ambas direcciones */
+  transition: color 0.2s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 a:hover {
   color: #5000ca;
-  transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out;
 }
 
 p, a, h1, h2, h3, h4, h5, label, button {
@@ -33,28 +59,7 @@ p, a, h1, h2, h3, h4, h5, label, button {
   font-family: "Lato", sans-serif;
 }
 
-.navigation-bar {
-  justify-content: space-between;
-  background-color: #0d1116;
-
-  button {
-    font-size: 1.1rem;
-    font-family: "Lato", sans-serif;
-    text-transform: initial;
-    padding: 6px 20px;
-  }
-
-  svg {
-    cursor: pointer;
-  }
-}
-
-.navigation-bar-responsive {
-  span, p {
-    color: #0d1116;
-    font-family: "Lato", sans-serif;
-  }
-}
+/* Nav styles live in Navigation.scss */
 
 .container {
   margin-top: 64px;
@@ -76,13 +81,7 @@ p, a, h1, h2, h3, h4, h5, label, button {
   }
 }
 
-.mobile-menu-top {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 5px;
-  font-weight: bold;
-}
+
 
 .items-container {
   padding: 5% 10%;
@@ -105,11 +104,6 @@ p, a, h1, h2, h3, h4, h5, label, button {
 
   a:hover {
     color: #5000ca;
-    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out;
-  }
-
-  .navigation-bar svg {
-    color: #0d1116;
   }
 
   .about-section {

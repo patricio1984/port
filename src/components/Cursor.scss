@@ -1,0 +1,117 @@
+// ─── Custom cursor ────────────────────────────────────────────────────────────
+// Dot  : 6 px, mix-blend-mode:difference → auto-inverts on any background
+// Ring : 40 px, lerp-driven by JS rAF loop
+//
+// All state classes live on the single .cursor root:
+//   .cursor--view     links/buttons  → ring expands 60px + "VIEW" label
+//   .cursor--drag     project images → dashed ring 52px + "DRAG" label
+//   .cursor--write    form inputs    → caret dot + small ring + "WRITE" label
+//   .cursor--clicking mousedown      → spring scale down
+//   .cursor--on-dark  / --on-light   → ring border color
+
+
+// ─── Dot ─────────────────────────────────────────────────────────────────────
+.cursor__dot {
+  position:      fixed;
+  top:           0;
+  left:          0;
+  width:         6px;
+  height:        6px;
+  border-radius: 50%;
+  background:    #ffffff;
+  pointer-events: none;
+  z-index:       9999;
+
+  // Inverts any colour beneath automatically
+  mix-blend-mode: difference;
+
+  /* Use CSS variables for translation and scale; JS updates --dx/--dy.
+     The computed transform composes translate + scale in one property so
+     GSAP can read and revert it safely. */
+  transform: translate(var(--dx, -100px), var(--dy, -100px)) scale(var(--sdot, 1));
+  transition:
+    transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1),
+    opacity   0.2s  ease;
+
+  .cursor--clicking & { opacity: 0.5; }
+  .cursor--drag     & { opacity: 0; }              // crosshair replaces dot
+  .cursor--write    & { opacity: 0; }              // native I-beam takes over
+}
+
+
+// ─── Ring ─────────────────────────────────────────────────────────────────────
+.cursor__ring {
+  position:      fixed;
+  top:           0;
+  left:          0;
+  width:         40px;
+  height:        40px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index:       9998;
+  display:       flex;
+  align-items:   center;
+  justify-content: center;
+
+  /* Base transform composes translate from CSS vars (updated by JS)
+     with scale via --s variable set in state classes. GSAP can read the
+     single `transform` string and will safely revert/kill tweens. */
+  transform: translate(var(--tx, -100px), var(--ty, -100px)) scale(var(--s, 1));
+  transition:
+    transform    0.42s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.22s ease,
+    border-style 0.1s  ease,
+    opacity      0.22s ease;
+}
+
+
+// ─── Ring: dark / light bg ────────────────────────────────────────────────────
+.cursor--on-dark  .cursor__ring { border: 1.5px solid rgba(255, 255, 255, 0.50); }
+.cursor--on-light .cursor__ring { border: 1.5px solid rgba(0,   0,   0,   0.38); }
+
+
+// ─── Label ────────────────────────────────────────────────────────────────────
+.cursor__label {
+  font-family:    var(--font-mono, monospace);
+  font-size:      8px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  pointer-events: none;
+  white-space:    nowrap;
+  opacity:        0;
+  transition:     opacity 0.2s ease;
+}
+
+.cursor--on-dark  .cursor__label { color: #ffffff; }
+.cursor--on-light .cursor__label { color: #111111; }
+
+
+// ─── State: VIEW — scale from 40px base: 60/40 = 1.5
+.cursor--view .cursor__ring { --s: 1.5; }
+.cursor--view.cursor--on-dark  .cursor__ring { border-color: rgba(255, 255, 255, 0.72); }
+.cursor--view.cursor--on-light .cursor__ring { border-color: rgba(0,   0,   0,   0.55); }
+.cursor--view .cursor__label  { opacity: 1; }
+
+
+// ─── State: DRAG — scale from 40px base: 52/40 = 1.3
+.cursor--drag .cursor__ring { --s: 1.3; border-style: dashed; }
+.cursor--drag.cursor--on-dark  .cursor__ring { border-color: rgba(255, 255, 255, 0.8); }
+.cursor--drag.cursor--on-light .cursor__ring { border-color: rgba(0,   0,   0,   0.7); }
+.cursor--drag .cursor__label { opacity: 1; }
+
+
+// ─── State: WRITE — hide custom cursor entirely; native I-beam takes over
+.cursor--write .cursor__dot  { opacity: 0; }
+.cursor--write .cursor__ring { opacity: 0; }
+.cursor--write .cursor__label { opacity: 0; }
+
+
+// ─── State: CLICKING — scale from 40px base: 26/40 = 0.65
+.cursor--clicking .cursor__ring {
+  --s: 0.65;
+  opacity: 0.45;
+  /* Override transition to be snappy on press */
+  transition:
+    transform 0.12s cubic-bezier(0.34, 1.56, 0.64, 1),
+    opacity   0.1s ease;
+}

@@ -5,4 +5,7 @@ export interface IProject {
   alt: string;
   title: string;
   description: string;
+  year: string;
+  tech: string[];
+  decisions: string[];
 }

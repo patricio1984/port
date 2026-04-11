@@ -1,0 +1,37 @@
+/* ────────────────────────────────────────────────────────────────────────────
+   GrainOverlay
+   Fixed 200 × 200 noise tile that shifts position every ~120 ms to simulate
+   film-grain flicker. Neutral luminance canvas → no colour cast.
+   ──────────────────────────────────────────────────────────────────────────── */
+
+.grain-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 997;
+  pointer-events: none;
+  background-repeat: repeat;
+  background-size: 200px 200px;
+
+  /* ─ opacity tuned so grain reads on both light and dark sections ─ */
+  opacity: 0.045;
+
+  /* ─ 8-frame temporal shift that mimics 24 fps film grain ─ */
+  animation: grain-shift 0.8s steps(1) infinite;
+
+  /* disable animation when user requests reduced motion — overlay stays but static */
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
+/* ─ Each keyframe jumps to a new background-position offset ─────────────── */
+@keyframes grain-shift {
+  0%    { background-position:   0px    0px; }
+  12.5% { background-position:  17px  -23px; }
+  25%   { background-position: -31px   12px; }
+  37.5% { background-position:   7px   34px; }
+  50%   { background-position: -24px   -8px; }
+  62.5% { background-position:  38px  -19px; }
+  75%   { background-position: -13px   27px; }
+  87.5% { background-position:  22px  -41px; }
+}

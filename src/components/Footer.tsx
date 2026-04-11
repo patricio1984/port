@@ -1,15 +1,82 @@
-import GitHubIcon from '@mui/icons-material/GitHub';
-import LinkedInIcon from '@mui/icons-material/LinkedIn';
-import '../assets/styles/Footer.scss'
+import '../assets/styles/Footer.scss';
+
+function GitHubIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"
+      aria-hidden="true" focusable="false">
+      <path d="M12 2C6.477 2 2 6.484 2 12.021c0 4.428 2.865 8.185 6.839 9.504.5.092.682-.217.682-.482 0-.237-.009-.868-.013-1.703-2.782.605-3.369-1.342-3.369-1.342-.454-1.157-1.11-1.465-1.11-1.465-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.026 2.747-1.026.546 1.378.202 2.397.1 2.65.64.7 1.028 1.595 1.028 2.688 0 3.848-2.338 4.695-4.566 4.943.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.203 22 16.447 22 12.021 22 6.484 17.523 2 12 2z"/>
+    </svg>
+  );
+}
+
+function LinkedInIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"
+      aria-hidden="true" focusable="false">
+      <path d="M19 3A2 2 0 0 1 21 5V19A2 2 0 0 1 19 21H5A2 2 0 0 1 3 19V5A2 2 0 0 1 5 3H19M18.5 18.5V13.2A3.26 3.26 0 0 0 15.24 9.94C14.39 9.94 13.4 10.46 12.92 11.24V10.13H10.13V18.5H12.92V13.57A1.46 1.46 0 0 1 14.38 12.11A1.46 1.46 0 0 1 15.84 13.57V18.5H18.5M6.88 8.56A1.68 1.68 0 0 0 8.56 6.88C8.56 5.95 7.81 5.19 6.88 5.19A1.69 1.69 0 0 0 5.19 6.88C5.19 7.81 5.95 8.56 6.88 8.56M8.27 18.5V10.13H5.5V18.5H8.27Z"/>
+    </svg>
+  );
+}
+
+const SOCIAL = [
+  {
+    label: 'GitHub',
+    href:  'https://github.com/patricio1984',
+    icon:  <GitHubIcon />,
+  },
+  {
+    label: 'LinkedIn',
+    href:  'https://www.linkedin.com/in/patriciomainero/',
+    icon:  <LinkedInIcon />,
+  },
+] as const;
 
 function Footer() {
+  const year = new Date().getFullYear();
+
   return (
-    <footer>
-      <div>
-        <a href="https://github.com/patricio1984" target="_blank" rel="noreferrer" aria-label="GitHub de Patricio"><GitHubIcon/></a>
-        <a href="https://www.linkedin.com/in/patriciomainero/" target="_blank" rel="noreferrer" aria-label="Linkedin de Patricio"><LinkedInIcon/></a>
+    <footer className="footer" role="contentinfo">
+      {/* Hairline top divider */}
+      <div className="footer__rule" aria-hidden="true" />
+
+      <div className="footer__inner">
+
+        {/* Brand */}
+        <p className="footer__brand">
+          PM<span className="footer__brand-dot">.</span>
+        </p>
+
+        {/* Credit */}
+        <p className="footer__credit">
+          Diseñado y construido por{' '}
+          <a
+            className="footer__link"
+            href="https://github.com/patricio1984/port"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Patricio Mainero
+          </a>
+          {' '}— {year}
+        </p>
+
+        {/* Social links */}
+        <nav className="footer__social" aria-label="Redes sociales">
+          {SOCIAL.map(({ label, href, icon }) => (
+            <a
+              key={label}
+              className="footer__social-link"
+              href={href}
+              target="_blank"
+              rel="noreferrer"
+              aria-label={`${label} de Patricio Mainero`}
+            >
+              {icon}
+            </a>
+          ))}
+        </nav>
+
       </div>
-      <p>Un portfolio diseñado y construido por <a href="https://github.com/patricio1984/port" target="_blank" rel="noreferrer">Patricio Mainero</a> con 💜</p>
     </footer>
   );
 }

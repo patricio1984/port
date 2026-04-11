@@ -1,0 +1,58 @@
+// ─── Loader — page intro overlay ─────────────────────────────────────────────
+// Phase 1: full-screen black, counting number animates (JS rAF)
+// Phase 2: .loader--leaving  →  translateY(-100%) wipe in 350ms
+// After:   component unmounts, onDone() fires, page entrance begins
+
+.loader {
+  position:    fixed;
+  inset:       0;
+  z-index:     600;           // above cursor (9998) is intentional — covers all
+  z-index:     9999;
+  background:  #0a0a0a;       // slightly off-black to feel warmer
+
+  display:     flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap:         var(--space-5, 1.5rem);
+
+  // Exit: wipe upward
+  transition: transform 0.38s cubic-bezier(0.76, 0, 0.24, 1);
+  transform-origin: top;
+
+  &--leaving {
+    transform: translateY(-100%);
+  }
+}
+
+
+// ─── Logo mark — two slashes ──────────────────────────────────────────────────
+.loader__mark {
+  display:     flex;
+  gap:         2px;
+  line-height: 1;
+}
+
+.loader__slash {
+  font-family:    var(--font-mono, monospace);
+  font-size:      clamp(1.5rem, 3vw, 2.5rem);
+  color:          var(--_violet-5, #8b5cf6);
+  letter-spacing: -0.05em;
+  opacity:        0.9;
+}
+
+
+// ─── Counting number ─────────────────────────────────────────────────────────
+.loader__count {
+  font-family:  var(--font-display, serif);
+  font-size:    clamp(5rem, 15vw, 10rem);
+  font-weight:  800;
+  font-variation-settings: 'wght' 800, 'opsz' 72;
+  line-height:  1;
+  letter-spacing: -0.06em;
+  color:        #ffffff;
+  // Tabular figures so digits don't shift horizontally
+  font-variant-numeric: tabular-nums;
+  // Subtle glow
+  text-shadow:  0 0 60px rgba(139, 92, 246, 0.25);
+}

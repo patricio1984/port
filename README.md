@@ -1,86 +1,88 @@
-# Developer Portfolio Template 🚀
+# Portfolio — Patricio
 
-![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB) ![Node.js](https://img.shields.io/badge/Node%20js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white) ![npm](https://img.shields.io/badge/npm-CB3837?style=for-the-badge&logo=npm&logoColor=white) ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white) ![JavaScript](https://img.shields.io/badge/JavaScript-323330?style=for-the-badge&logo=javascript&logoColor=F7DF1E) ![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white) ![Sass](https://img.shields.io/badge/Sass-CC6699?style=for-the-badge&logo=sass&logoColor=white)
+![React](https://img.shields.io/badge/React_18-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)
+![GSAP](https://img.shields.io/badge/GSAP-88CE02?style=for-the-badge&logo=greensock&logoColor=black)
+![Sass](https://img.shields.io/badge/Sass-CC6699?style=for-the-badge&logo=sass&logoColor=white)
 
-## What is this?
+Portfolio personal construido con React 18, TypeScript y Vite. Diseño oscuro, animaciones de scroll, y tres modos de visualización para la sección de habilidades.
 
-This simple portfolio template is designed to showcase your past projects, career history, skill sets, and more.
+🔗 **[Ver en vivo →](https://patricio1984.github.io/port/)**
 
-View the [Demo](https://yujisatojr.github.io/react-portfolio-template/).
+---
 
-**This template is free to use, and no attribution is required.** You can fork or download this repository to customize it for your own use. Please don't forget to leave a ⭐ if you like this portfolio!
+## Stack
 
-![screenshot](./src/assets//images/screenshot.png)
+| Categoría | Tecnologías |
+|---|---|
+| UI | React 18, TypeScript, SCSS/Sass |
+| Build | Vite 8, gh-pages |
+| Animaciones | GSAP 3 + ScrollTrigger, Lenis (smooth scroll) |
+| Iconos | FontAwesome 6 |
+| Email | EmailJS |
+| Gráficos | Canvas 2D API |
 
-## Features
+---
 
-✅ Open source (free to use, no attribution required)  
-✅ Responsive design & mobile-friendly  
-✅ Supports both dark and light modes  
-✅ Highly customizable multi-component layout  
-✅ Built with modern technologies (React, TypeScript, JavaScript, and SCSS)  
+## Secciones
 
-## Quick Setup
+- **Hero** — presentación con tipografía display variable (Fraunces)
+- **Expertise** — tres modos de vista intercambiables:
+  - *Editorial*: tarjetas con stack por área
+  - *Constelación*: simulación de física en Canvas 2D
+  - *Marquesina*: scroll infinito animado en CSS
+- **Proyectos** — case studies con imagen, descripción técnica y decisiones de diseño; fade-in con IntersectionObserver
+- **Carrera** — timeline horizontal scrubleable con GSAP + ScrollTrigger (3 roles: Zeetrex → Avature → Freelance)
+- **Contacto** — formulario con EmailJS
+- **Footer** — links a redes
 
-1. Ensure you have [Node.js](https://nodejs.org/) installed. Check your installation by running:
+---
 
-    ```bash
-    node -v
-    ```
+## Desarrollo local
 
-2. In the project directory, install dependencies:
+```bash
+# Instalar dependencias
+npm install
 
-    ```bash
-    npm install
-    ```
+# Iniciar servidor de desarrollo
+npm run dev
+```
 
-3. Start the development server:
+Abre [http://localhost:5173](http://localhost:5173) en el navegador.
 
-    ```bash
-    npm start
-    ```
+---
 
-4. Open [http://localhost:3000](http://localhost:3000) to view the app in the browser.
+## Deploy
 
-5. Customize the template by navigating to the `/src/components` directory. Modify texts, pictures, and other information as needed.
+El proyecto se despliega en GitHub Pages desde la carpeta `dist`.
 
-The page will reload if you make edits, and you will see any lint errors in the console.
+```bash
+npm run deploy
+```
 
-If you are interested in creating a mockup image like the ones from the personal projects section, I recommend [Genmoo](https://gemoo.com/tools/browser-mockup-generator/). This website lets you generate sleek looking browser mockups for free.
+Esto ejecuta `vite build` y luego publica el resultado con `gh-pages`.
 
-## Deployment
+---
 
-You can choose your preferred service (e.g., [Netlify](https://www.netlify.com/), [Render](https://render.com/), [Heroku](https://www.heroku.com/)) for deployment. One of the easiest ways to host this portfolio is using GitHub Pages. Follow the instructions below for a production deploy.
+## Estructura
 
-1. **Set Up GitHub Repository**
-
-    Create a new repository on GitHub for your portfolio app.
-
-2. **Configure `package.json`**
-
-    Edit the following properties in your `package.json` file:
-
-    ```json
-    {
-        "homepage": "https://yourusername.github.io/your-repo-name",
-        "scripts": {
-            "predeploy": "npm run build",
-            "deploy": "gh-pages -d build",
-            ...
-        }
-    }
-    ```
-
-    Replace `yourusername` with your GitHub username and `your-repo-name` with the name of your GitHub repository.
-
-3. **Deploy to GitHub Pages**
-
-    Run the following command to deploy your app:
-
-    ```bash
-    npm run deploy
-    ```
-
-4. **Access Your Deployed App**
-
-    After successfully deploying, you can access your app at `https://yourusername.github.io/your-repo-name`.
+```
+src/
+├── assets/
+│   ├── images/          # Imágenes de proyectos (.webp)
+│   └── styles/          # SCSS por componente + design tokens
+├── components/
+│   ├── Main.tsx         # Hero / presentación
+│   ├── Expertise.tsx    # Habilidades (Editorial / Constelación / Marquesina)
+│   ├── Projects/
+│   │   ├── Project.tsx      # Lista de proyectos con reveals
+│   │   ├── ProjectCard.tsx  # Panel de case study
+│   │   └── ProjectData.ts   # Datos de proyectos
+│   ├── Timeline.tsx     # Carrera profesional
+│   ├── Navigation.tsx   # Navbar con active state por scroll
+│   ├── Contact.tsx      # Formulario de contacto
+│   ├── Footer.tsx
+│   └── FadeIn.tsx       # Wrapper de animación de entrada
+└── index.scss           # Reset global + design tokens
+```

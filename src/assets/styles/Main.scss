@@ -1,154 +1,388 @@
-.dark-mode .about-section {
-    background-color: rgba(0, 0, 0, 0.2);
+/* ==========================================================================
+   HERO — Awwwards-level editorial layout
+   Uses design-tokens.css custom properties throughout.
+   No hardcoded colors. No fixed font sizes.
+   ========================================================================== */
+
+// ─── Wrapper ──────────────────────────────────────────────────────────────────
+.hero-wrapper {
+  position: relative;      // canvas is absolute inside
+  // Nav is now transparent/floating — hero starts at 0
+  margin-top: 0;
+  width: 100%;
+  overflow: hidden;
+  background: var(--_black-2);
 }
 
-.about-section {
-    display: flex;
-    gap: 30px;
-    justify-content: flex-start;
-    align-items: center;
+// ─── Generative canvas ───────────────────────────────────────────────────────
+.hero__canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  pointer-events: none;
+  z-index: 0;  // Promote to own compositing layer for GSAP parallax (y transform)
+  will-change: transform;  // Very subtle vignette to pull attention toward text
+  mask-image: radial-gradient(ellipse 90% 85% at 30% 70%, black 40%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 90% 85% at 30% 70%, black 40%, transparent 100%);
+}
+
+// ─── Scroll progress — fixed right edge, vertical ────────────────────────────
+.scroll-progress {
+  position: fixed;
+  right: var(--space-6);
+  top: 50%;
+  transform: translateY(-50%);
+  width: 2px;
+  height: clamp(80px, 18vh, 160px);
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius-pill);
+  z-index: var(--z-sticky);
+  pointer-events: none;
+
+  &__fill {
     width: 100%;
-    padding: 0px 15%;
-    min-height: 700px;
-    background-image: url("../images/bg-dark.webp");
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
+    height: 100%;
+    background: linear-gradient(
+      180deg,
+      var(--_violet-4) 0%,
+      var(--_violet-6) 100%
+    );
+    border-radius: inherit;
+    transform: scaleY(0);
+    transform-origin: top center;
+    will-change: transform;
+  }
 }
 
-.about-section .content {
-    text-align: left;
-    z-index: 2;
+// ─── Hero section — asymmetric editorial grid ─────────────────────────────────
+.hero {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-rows: 1fr auto;
+  // Nav now floats above — hero fills full viewport height
+  min-height: 100svh;
+  // Extra top padding so content clears the 64px floating nav
+  padding: calc(var(--space-8) + var(--space-3)) var(--section-x) var(--space-8);
 
-    .social_icons {
-        display: flex;
-        flex-direction: row;
-        gap: 10px;
-        color: white;
-
-        svg {
-            font-size: 1.8em;
-        }
-    }
-
-    .mobile_social_icons {
-        display: none;
-    }
-
-    p {
-        font-size: 1.5em;
-        margin-block-start: 0px;
-        margin-block-end: 0px;
-    }
-
-    h1 {
-        font-size: 5em;
-        margin-block-start: 0px;
-        margin-block-end: 0px;
-    }
+  // Subtle full-height left border — editorial signature
+  &::before {
+    content: '';
+    position: absolute;
+    left: clamp(1rem, 4vw, 3rem);
+    top: 10%;
+    bottom: 10%;
+    width: 1px;
+    background: linear-gradient(
+      180deg,
+      transparent 0%,
+      rgba(124, 58, 237, 0.25) 40%,
+      rgba(124, 58, 237, 0.25) 60%,
+      transparent 100%
+    );
+    pointer-events: none;
+  }
 }
 
-.about-section .image-wrapper {
-    z-index: 2;
-    img {
-        width: 150px;
-        border-radius: 50%;
-    }
+// ─── Social — top left ────────────────────────────────────────────────────────
+.hero__social {
+  grid-column: 1;
+  grid-row: 1;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding-top: var(--space-1);
 }
 
-.about p {
-    text-align: center;
-    padding-top: 30%;
-    padding-bottom: 30%;
+.hero__social-link {
+  display: flex;
+  color: var(--_neutral-4);
+  // Transition on base state — animates both in and out
+  transition:
+    color    var(--duration-base) var(--ease-out-expo),
+    transform var(--duration-base) var(--ease-out-back);
+
+  &:hover {
+    color: var(--_violet-6);
+    transform: translateY(-3px);
+  }
+
+  svg { font-size: 1.35rem; }
 }
 
-@media screen {
-    @media (max-width: 567px) {
-        .nav-left{
-            padding-top: 20px;
-            float:left;
-        }
+// ─── Photo — top right, receives magnetic JS ──────────────────────────────────
+.hero__photo {
+  grid-column: 2;
+  grid-row: 1;
+  align-self: start;
+  justify-self: end;
+  position: relative;
+  // Slight upward bleed — intentionally breaks the grid line
+  margin-top: calc(-1 * var(--space-3));
+  will-change: transform;
 
-        .nav-left img {
-            height: 35px
-        }
+  img {
+    display: block;
+    width: clamp(100px, 11vw, 190px);
+    height: clamp(100px, 11vw, 190px);
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: top center;
+    // drop-shadow() is GPU-composited (unlike box-shadow which triggers repaint).
+    // Wrap all filter functions so the single `filter` transition handles all.
+    filter: grayscale(0.15) contrast(1.08) drop-shadow(0 0 16px rgba(124, 58, 237, 0.35));
+    border: 1px solid rgba(124, 58, 237, 0.28);
+    transition: filter var(--duration-moderate) var(--ease-out-expo);
+  }
 
-        .nav-right {
-            float:right;
-        }
+  // Animated ring — decorative, not interactive
+  &-ring {
+    position: absolute;
+    inset: -8px;
+    border-radius: 50%;
+    border: 1px solid rgba(124, 58, 237, 0.15);
+    animation: ring-pulse 3.5s var(--ease-in-out-sine) infinite;
+    pointer-events: none;
+  }
 
-        .nav-right li {
-            padding: 10px 15px;
-            list-style:none;
-            font-size:13px;
-            color:white;
-            width: 10%;
-        }
+  &:hover img {
+    filter: grayscale(0) contrast(1.12)
+            drop-shadow(0 0 32px rgba(124, 58, 237, 0.4))
+            drop-shadow(0 0 64px rgba(124, 58, 237, 0.15));
+  }
+}
 
-        .nav-right ul {
-            list-style-type: none;
-            margin: 0px;
-            padding: 0px;
-        }
+@keyframes ring-pulse {
+  0%, 100% { transform: scale(1);    opacity: 0.5; }
+  50%       { transform: scale(1.06); opacity: 0.12; }
+}
 
-        body {
-            width: 100%;
-        }
+// ─── Text block — bottom left ─────────────────────────────────────────────────
+.hero__text {
+  grid-column: 1;
+  grid-row: 2;
+  align-self: end;
+  // Intentionally doesn't fill full width — editorial breathing room
+  max-width: min(860px, 80vw);
+}
 
-        .about {
-            padding-left: 5%;
-            padding-right: 5%;
-            font-size: 12px;
-        }
+// Role — monospaced eyebrow with crossfade
+.hero__eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-widest);
+  text-transform: uppercase;
+  color: var(--_violet-6);
+  margin: 0 0 var(--space-3);
+  // Fixed height prevents layout shift during role swap
+  height: 1.4em;
+  display: flex;
+  align-items: center;
+
+  &::before {
+    content: '//';
+    margin-right: var(--space-2);
+    opacity: 0.45;
+    flex-shrink: 0;
+  }
+}
+
+.hero__role {
+  display: inline-block;
+  opacity: 1;
+  transform: translateY(0px);
+  // Smooth crossfade — both in AND out directions
+  transition:
+    opacity   380ms var(--ease-in-out-quint),
+    transform 380ms var(--ease-in-out-quint);
+
+  &--exit {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+
+// Name — Fraunces variable display, scroll-weight animation
+.hero__name {
+  // CSS variable driven by JS scroll listener
+  --name-wght: 800;
+
+  font-family: var(--font-display);
+  font-size: var(--text-hero);
+  // font-weight falls back to 800 if variable font not loaded
+  font-weight: 800;
+  // Variable font axes: weight + optical size at hero scale
+  font-variation-settings: 'wght' var(--name-wght), 'opsz' 72;
+  // Smooth weight transition as user scrolls (capped to avoid jank)
+  transition: font-variation-settings 80ms linear;
+
+  letter-spacing: var(--tracking-tight);
+  line-height: var(--leading-tight);
+  color: var(--_neutral-0);
+  margin: 0 0 var(--space-5);
+  // Force font rendering — prevents subpixel artifacts on variable weight
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+
+  // Each word is a flex row of clipped characters
+  .char__word {
+    display: inline-flex;
+    margin-right: 0.22em;
+  }
+
+  // The clip wrapper — overflow:hidden is the mask
+  .char__clip {
+    display: inline-block;
+    overflow: hidden;
+    line-height: inherit;
+    vertical-align: bottom;
+  }
+
+  // The character — GSAP animates yPercent 115→0
+  // Hover: subtle lift + accent tint, no font-variation conflict
+  .char__inner {
+    display: inline-block;
+    will-change: transform;
+    transition:
+      transform var(--duration-fast) var(--ease-out-back),
+      color     var(--duration-fast) var(--ease-out-expo);
+    cursor: default;
+
+    &:hover {
+      transform: translateY(-4px);
+      color: var(--_violet-7);
     }
+  }
 
-    @media (max-width:1024px) {
-        .about-section h1 {
-            font-size: 3em !important;
-            text-align: left;
-        }
+  .char__space {
+    display: inline-block;
+    width: 0.25em;
+  }
+}
 
-        .about-section p {
-            text-align: left;
-        }
+// Light mode: Fraunces renders better slightly darker on warm bg
+.light-mode .hero__name {
+  color: var(--_black-2);
+  .char__inner:hover { color: var(--_violet-4); }
+}
 
-        .container {
-            display: initial;
-        }
+// Meta row — location + CTA
+.hero__meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
+  padding-bottom: var(--space-9);
+}
 
-        .social_icons {
-            display: none !important;
-        }
+.hero__location {
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  color: var(--_neutral-4);
+  letter-spacing: var(--tracking-wide);
+}
 
-        .mobile_social_icons {
-            padding-top: 10px;
-            display: flex !important;
-            flex-direction: row;
-            gap: 10px;
-            color: white;
-    
-            svg {
-                font-size: 1.8em;
-            }
-        }
+// CTA — pill button, magnetic target
+.hero__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  color: var(--_neutral-1);
+  letter-spacing: var(--tracking-wide);
+  padding: var(--space-3) var(--space-5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-pill);
+  will-change: transform;
+  // Transition on base state
+  transition:
+    background     var(--duration-base) var(--ease-out-expo),
+    border-color   var(--duration-base) var(--ease-out-expo),
+    color          var(--duration-base) var(--ease-out-expo);
 
-        .about-section {
-            padding-top: 150px;
-            display: block;
-            padding-left: 0px;
-            padding-right: 0px;
-        }
+  svg {
+    flex-shrink: 0;
+    transition: transform var(--duration-base) var(--ease-out-back);
+  }
 
-        .about-section .content {
-            width: 90%;
-            padding-left: 5%;
-            padding-right: 5%;
-            padding-bottom: 5%;
-        }
+  &:hover {
+    background:    rgba(124, 58, 237, 0.12);
+    border-color:  var(--_violet-4);
+    color:         var(--_violet-7);
 
-        .about-section .image-wrapper {
-            padding-left: 5%;
-            width: 100%;
-        }
-    }
+    svg { transform: translateX(5px); }
+  }
+}
+
+// ─── Light mode overrides ─────────────────────────────────────────────────────
+.light-mode {
+  .hero-wrapper  { background: var(--_warm-7); }
+  .hero__name    { color: var(--_black-2); }
+  .hero__location{ color: var(--_neutral-4); }
+  .hero__photo img { border-color: rgba(124, 58, 237, 0.18); }
+  .hero__cta     { border-color: rgba(0, 0, 0, 0.1); color: var(--_black-2); }
+  .scroll-progress { background: rgba(0, 0, 0, 0.07); }
+
+  .hero::before {
+    background: linear-gradient(
+      180deg,
+      transparent 0%,
+      rgba(124, 58, 237, 0.15) 40%,
+      rgba(124, 58, 237, 0.15) 60%,
+      transparent 100%
+    );
+  }
+}
+
+// ─── Responsive ───────────────────────────────────────────────────────────────
+@media (max-width: 1024px) {
+  .hero {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+    padding: var(--space-7) var(--space-5);
+    min-height: calc(100svh - 64px);
+
+    // Remove decorative border on mobile — too cluttered
+    &::before { display: none; }
+  }
+
+  .hero__social {
+    grid-column: 1; grid-row: 1;
+  }
+
+  .hero__photo {
+    grid-column: 1; grid-row: 2;
+    justify-self: start;
+    margin-top: var(--space-5);
+    margin-bottom: var(--space-2);
+  }
+
+  .hero__text {
+    grid-column: 1; grid-row: 3;
+    max-width: 100%;
+  }
+
+  .hero__meta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-4);
+    padding-bottom: var(--space-7);
+  }
+
+  .scroll-progress {
+    right: var(--space-3);
+    height: 80px;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero__name {
+    // Prevent overflow on narrow screens
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
 }

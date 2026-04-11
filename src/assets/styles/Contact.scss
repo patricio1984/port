@@ -1,113 +1,244 @@
-.contact_wrapper svg {
-  font-size: 1em;
-  vertical-align: middle;
-  margin-right: 5px;
+/* ============================================================
+   CONTACT — Editorial two-column layout
+   Design system: dark-first, design-tokens.css variables.
+   No MUI. No hardcoded colors.
+   ============================================================ */
+
+// ─── Section wrapper ──────────────────────────────────────────────────────────
+.contact-section {
+  background:    var(--bg-base);
+  padding-block: var(--section-y);
+  padding-inline: var(--section-x);
 }
 
+// ─── Two-column grid ──────────────────────────────────────────────────────────
+.contact-inner {
+  display:               grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap:                   clamp(3rem, 6vw, 7rem);
+  align-items:           start;
+  max-width:             1100px;
+  margin-inline:         auto;
+
+  @media (max-width: 820px) {
+    grid-template-columns: 1fr;
+    gap:                   var(--space-7);
+  }
+}
+
+// ─── Left: editorial heading ──────────────────────────────────────────────────
+.contact-heading {
+  position: sticky;
+  top:      120px; // stays in view while form scrolls
+
+  @media (max-width: 820px) {
+    position: static;
+  }
+}
+
+.contact-eyebrow {
+  font-family:    var(--font-mono);
+  font-size:      var(--text-xs);
+  font-weight:    var(--weight-regular);
+  letter-spacing: var(--tracking-widest);
+  text-transform: uppercase;
+  color:          var(--_violet-5);
+  margin:         0 0 var(--space-4);
+}
+
+.contact-title {
+  font-family:           var(--font-display);
+  font-size:             var(--text-2xl);
+  font-weight:           var(--weight-bold);
+  font-variation-settings: 'wght' 700, 'opsz' 48;
+  letter-spacing:        var(--tracking-tight);
+  line-height:           var(--leading-tight);
+  color:                 var(--text-primary);
+  margin:                0 0 var(--space-5);
+
+  em {
+    font-style:  italic;
+    color:       var(--_violet-6);
+    font-weight: var(--weight-light);
+    font-variation-settings: 'wght' 300, 'opsz' 48;
+  }
+}
+
+.contact-sub {
+  font-family:  var(--font-sans);
+  font-size:    var(--text-md);
+  font-weight:  var(--weight-regular);
+  line-height:  var(--leading-relaxed);
+  color:        var(--text-secondary);
+  margin:       0;
+}
+
+// ─── Form ─────────────────────────────────────────────────────────────────────
 .contact-form {
-  padding-top: 20px;
+  display:        flex;
+  flex-direction: column;
+  gap:            var(--space-5);
+}
 
-  button {
-    float: right;
-    background-color: white;
-    color: #050f0b;
+.contact-form__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap:     var(--space-4);
+
+  @media (max-width: 520px) {
+    grid-template-columns: 1fr;
   }
+}
 
-  button:hover {
-    background-color: #5000ca;
-    color: white;
+// ─── Field block ──────────────────────────────────────────────────────────────
+.contact-field {
+  display:        flex;
+  flex-direction: column;
+  gap:            var(--space-2);
+}
+
+.contact-field__label {
+  font-family:    var(--font-mono);
+  font-size:      var(--text-2xs);
+  font-weight:    var(--weight-medium);
+  letter-spacing: var(--tracking-widest);
+  text-transform: uppercase;
+  color:          var(--text-tertiary);
+  transition:     color var(--duration-base) var(--ease-out-expo);
+
+  .contact-field:focus-within & {
+    color: var(--_violet-6);
   }
 }
 
-label {
-  font-size: 1.2rem;
-  font-family: 'DomaineDispNar-Medium', sans-serif;
-}
+.contact-field__input {
+  // Reset
+  appearance:  none;
+  border:      none;
+  outline:     none;
+  font-family: var(--font-sans);
+  font-size:   var(--text-base);
+  line-height: var(--leading-normal);
+  color:       var(--text-primary);
 
-.form-flex {
-  display: flex;
-  gap: 15px;
-  padding-bottom: 15px;
-}
+  // Surface
+  background:    var(--bg-surface);
+  border-radius: var(--radius-md);
+  border:        1px solid var(--border);
+  padding:       0.8em 1em;
+  width:         100%;
+  box-sizing:    border-box;
+  transition:
+    border-color var(--duration-base) var(--ease-out-expo),
+    background   var(--duration-base) var(--ease-out-expo),
+    box-shadow   var(--duration-base) var(--ease-out-expo);
 
-.form-flex .MuiFormControl-root {
-  width: 100%;
-  background-color: #FFFFFF;
-}
+  &::placeholder { color: var(--text-tertiary); }
 
-form {
-  width: 100% !important;
-}
-
-.body-form {
-  width: 100% !important;
-  margin-bottom: 15px !important;
-  padding: 16.5px 14px;
-  font-size: 16px;
-  font-family: 'Roboto', sans-serif;
-  border: 1px solid rgba(0, 0, 0, 0.23);
-  border-radius: 4px;
-  background-color: #fff;
-  color: #000;
-  line-height: 1.4375em;
-  transition: border-color 0.3s ease;
+  &:hover {
+    border-color: var(--border-hover);
+  }
 
   &:focus {
-    outline: none;
-    border-color: #3f51b5;
-    box-shadow: 0 0 0 2px rgba(63, 81, 181, 0.2);
+    border-color: var(--_violet-4);
+    background:   var(--bg-subtle);
+    box-shadow:   0 0 0 3px rgba(124, 58, 237, 0.18);
   }
 
-  &::placeholder {
-    color: rgba(0, 0, 0, 0.6);
-  }
-}
-
-.body-form.error {
-  border-color: #d32f2f;
-}
-
-.helper-text {
-  color: #d32f2f;
-  background-color: #FFFFFF;
-  font-size: 0.75rem;
-  margin-top: -22px;
-  margin-bottom: 16px;
-  padding: 4px 14px;
-  display: block;
-}
-
-.contact-form input,
-.contact-form textarea {
-  color: #000 !important;
-  font-size: 16px;
-}
-
-.contact-form .MuiInputBase-root {
-  color: #000 !important;
-  background-color: #FFFFFF;
-}
-
-.contact-form .form-flex .MuiFormControl-root { /* Más específico */
-  width: calc(50% - 7.5px);
-  background-color: #FFFFFF;
-}
-
-.feedback-message {
-  margin: 15px 0;
-  padding: 12px;
-  border-radius: 6px;
-  font-weight: 500;
-  text-align: center;
-
-  &.success {
-    background-color: #e6f4ea;
-    color: #2e7d32;
-  }
-
-  &.error {
-    background-color: #fdecea;
-    color: #c62828;
+  // Error state
+  .contact-field--error & {
+    border-color: rgba(239, 68, 68, 0.7);
+    &:focus { box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15); }
   }
 }
 
+.contact-field__textarea {
+  resize:      vertical;
+  min-height:  160px;
+}
+
+.contact-field__error {
+  font-family:  var(--font-sans);
+  font-size:    var(--text-xs);
+  color:        rgba(239, 68, 68, 0.9);
+  line-height:  var(--leading-snug);
+}
+
+// ─── Feedback toast ───────────────────────────────────────────────────────────
+.contact-feedback {
+  font-family:   var(--font-sans);
+  font-size:     var(--text-sm);
+  border-radius: var(--radius-md);
+  padding:       0.85em 1.1em;
+  border:        1px solid transparent;
+
+  &--ok {
+    background:   rgba(52, 211, 153, 0.08);
+    border-color: rgba(52, 211, 153, 0.25);
+    color:        rgba(52, 211, 153, 0.9);
+  }
+
+  &--err {
+    background:   rgba(239, 68, 68, 0.08);
+    border-color: rgba(239, 68, 68, 0.22);
+    color:        rgba(239, 68, 68, 0.85);
+  }
+}
+
+// ─── Footer + submit button ───────────────────────────────────────────────────
+.contact-form__footer {
+  display:         flex;
+  justify-content: flex-end;
+}
+
+.contact-submit {
+  display:         inline-flex;
+  align-items:     center;
+  gap:             var(--space-2);
+  font-family:     var(--font-sans);
+  font-size:       var(--text-sm);
+  font-weight:     var(--weight-semibold);
+  letter-spacing:  var(--tracking-wide);
+  color:           var(--_neutral-0);
+  background:      var(--_violet-4);
+  border:          none;
+  border-radius:   var(--radius-pill);
+  padding:         0.75em 1.8em;
+  cursor:          none;
+  transition:
+    background  var(--duration-base) var(--ease-out-expo),
+    transform   var(--duration-base) var(--ease-out-back),
+    opacity     var(--duration-base) var(--ease-out-expo);
+
+  &:hover:not(:disabled) {
+    background: var(--_violet-5);
+    transform:  translateY(-2px);
+  }
+
+  &:active:not(:disabled) {
+    transform:  translateY(0);
+    background: var(--_violet-3);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor:  not-allowed;
+  }
+
+  svg { flex-shrink: 0; }
+}
+
+// ─── Light-mode overrides ─────────────────────────────────────────────────────
+.light-mode {
+  .contact-field__input {
+    background: #ffffff;
+    color:      var(--_black-2);
+
+    &::placeholder { color: var(--_neutral-3); }
+    &:hover       { border-color: rgba(0, 0, 0, 0.2); }
+    &:focus {
+      background:   #ffffff;
+      border-color: var(--_violet-4);
+    }
+  }
+}
