@@ -78,7 +78,7 @@ function ShowreelEntry({
           alt={project.alt}
           className="sr-entry__image"
           width="1600"
-          height="800"
+          height="900"
           loading={index === 0 ? 'eager' : 'lazy'}
           decoding={index === 0 ? 'sync' : 'async'}
         />
