@@ -185,7 +185,7 @@ function Navigation({ parentToChild, modeChange, lenisRef }: NavigationProps) {
         </nav>
 
         <footer className="nav__overlay-footer">
-          <span>© {new Date().getFullYear()} Patricio García</span>
+          <span>© {new Date().getFullYear()} Patricio D Mainero</span>
         </footer>
       </div>
     </>

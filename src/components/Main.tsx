@@ -334,7 +334,7 @@ export default function Main() {
         <div ref={photoRef} className="hero__photo">
             <img
               src={profileImg}
-              alt="Patricio Mainero, Front End Developer"
+              alt="Patricio D. Mainero, Front End Developer"
               width="190"
               height="190"
               loading="eager"

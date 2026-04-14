@@ -55,7 +55,7 @@ function Footer() {
             target="_blank"
             rel="noreferrer"
           >
-            Patricio Mainero
+            Patricio D.Mainero
           </a>
           {' '}— {year}
         </p>
@@ -69,7 +69,7 @@ function Footer() {
               href={href}
               target="_blank"
               rel="noreferrer"
-              aria-label={`${label} de Patricio Mainero`}
+              aria-label={`${label} de Patricio D. Mainero`}
             >
               {icon}
             </a>
