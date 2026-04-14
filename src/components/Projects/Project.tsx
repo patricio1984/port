@@ -51,10 +51,12 @@ function ShowreelEntry({
   project,
   index,
   onOpen,
+  isLight,
 }: {
   project: IProject;
   index: number;
   onOpen: () => void;
+  isLight: boolean;
 }) {
   const imageWrapRef = useReveal<HTMLDivElement>();
   const num = String(index + 1).padStart(2, '0');
@@ -72,7 +74,7 @@ function ShowreelEntry({
       {/* ── Image: clip-path curtain reveal, scale on hover ── */}
       <div ref={imageWrapRef} className="sr-image-wrap">
         <img
-          src={project.image}
+          src={isLight && project.imageLight ? project.imageLight : project.image}
           alt={project.alt}
           className="sr-entry__image"
           width="1600"
@@ -134,10 +136,13 @@ function ShowreelEntry({
 function CaseStudyPanel({
   project,
   onClose,
+  isLight,
 }: {
   project: IProject;
   onClose: () => void;
+  isLight?: boolean;
 }) {
+  // Accept optional isLight prop in later patch (kept backward compatible)
   const panelRef  = useRef<HTMLDivElement>(null);
   const closeRef  = useRef<HTMLButtonElement>(null);
   const [visible, setVisible] = useState(false);
@@ -230,7 +235,7 @@ function CaseStudyPanel({
           {/* Project image — small thumbnail in panel */}
           <div className="sr-panel__thumb">
             <img
-              src={project.image}
+              src={isLight && project.imageLight ? project.imageLight : project.image}
               alt=""
               aria-hidden="true"
               width="800"
@@ -304,6 +309,22 @@ function CaseStudyPanel({
 
 // ─── Section ──────────────────────────────────────────────────────────────────
 const Project = () => {
+  const [isLight, setIsLight] = useState<boolean>(() => {
+    try {
+      return !!document.querySelector('.main-container')?.classList.contains('light-mode');
+    } catch {
+      return false;
+    }
+  });
+
+  useEffect(() => {
+    const root = document.querySelector('.main-container');
+    if (!root) return;
+    const mo = new MutationObserver(() => setIsLight(root.classList.contains('light-mode')));
+    mo.observe(root, { attributes: true, attributeFilter: ['class'] });
+    return () => mo.disconnect();
+  }, []);
+
   const [activeId, setActiveId] = useState<number | null>(null);
   const activeProject = projectData.find(p => p.id === activeId) ?? null;
 
@@ -328,6 +349,7 @@ const Project = () => {
             key={project.id}
             project={project}
             index={i}
+            isLight={isLight}
             onOpen={() => setActiveId(project.id)}
           />
         ))}
@@ -338,6 +360,7 @@ const Project = () => {
         <CaseStudyPanel
           project={activeProject}
           onClose={() => setActiveId(null)}
+          isLight={isLight}
         />
       )}
     </section>

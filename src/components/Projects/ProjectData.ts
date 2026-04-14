@@ -1,14 +1,18 @@
 import { IProject } from './ProjectTypes';
 
 import project11 from '../../assets/images/9.webp';
+import project11Light from '../../assets/images/9-light.webp';
 import project13 from '../../assets/images/11.webp';
+import project13Light from '../../assets/images/11-light.webp';
 import project18 from '../../assets/images/18.webp';
+import project18Light from '../../assets/images/18-light.webp';
 
 const projectData: IProject[] = [
   {
     id: 1,
     link: 'https://issinrealtime.netlify.app/',
     image: project11,
+    imageLight: project11Light,
     alt: 'Captura de pantalla de Seguimiento en tiempo real de la ISS',
     title: 'Seguimiento en tiempo real de la ISS',
     year: '2024',
@@ -24,6 +28,7 @@ const projectData: IProject[] = [
     id: 2,
     link: 'https://pokemonapi30.netlify.app/',
     image: project18,
+    imageLight: project18Light,
     alt: 'Captura de pantalla de Pokemon API',
     title: 'Pokemon API Explorer',
     year: '2026',
@@ -39,6 +44,7 @@ const projectData: IProject[] = [
     id: 3,
     link: 'https://analizadordeimagenes.netlify.app/',
     image: project13,
+    imageLight: project13Light,
     alt: 'Captura de pantalla del Analizador de Imágenes',
     title: 'Animal Classifier — Clasificador de imágenes con IA',
     year: '2024',

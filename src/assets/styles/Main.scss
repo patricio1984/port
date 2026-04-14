@@ -336,6 +336,24 @@
       transparent 100%
     );
   }
+
+  // Center hero content in light mode for a cleaner, symmetrical layout
+  .hero {
+    justify-items: center;
+    text-align: center;
+  }
+
+  .hero__photo {
+    justify-self: center;
+    align-self: center;
+    margin-top: 0;
+  }
+
+  .hero__text {
+    align-self: center;
+    max-width: 720px;
+    margin-left: 0;
+  }
 }
 
 // ─── Responsive ───────────────────────────────────────────────────────────────

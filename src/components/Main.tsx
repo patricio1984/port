@@ -293,6 +293,24 @@ export default function Main() {
   useMagnetic(photoRef as React.RefObject<HTMLElement>, 28);
   useMagnetic(ctaRef   as React.RefObject<HTMLElement>, 16);
 
+  const [isLight, setIsLight] = useState<boolean>(() => {
+    try {
+      return !!document.querySelector('.main-container')?.classList.contains('light-mode');
+    } catch {
+      return false;
+    }
+  });
+
+  useEffect(() => {
+    const root = document.querySelector('.main-container');
+    if (!root) return;
+    const mo = new MutationObserver(() => {
+      setIsLight(root.classList.contains('light-mode'));
+    });
+    mo.observe(root, { attributes: true, attributeFilter: ['class'] });
+    return () => mo.disconnect();
+  }, []);
+
   return (
     <div className="hero-wrapper">
       <HeroCanvas />
