@@ -16,6 +16,41 @@ html {
   overflow-x: hidden;
   background: #111111;
   box-sizing: border-box;
+
+  // ─── Custom scrollbar — Webkit (Chrome, Edge, Safari) ───────────────
+  scrollbar-width: thin;                           // Firefox
+  scrollbar-color: rgba(124, 58, 237, 0.45) transparent; // Firefox
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba(124, 58, 237, 0.4);
+    border-radius: 9999px;
+    transition: background 300ms ease;
+
+    &:hover {
+      background: rgba(124, 58, 237, 0.75);
+    }
+  }
+}
+
+// ─── Scrollbar light-mode override ─────────────────────────────────────
+.light-mode {
+  scrollbar-color: rgba(124, 58, 237, 0.35) transparent;
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba(124, 58, 237, 0.3);
+
+    &:hover {
+      background: rgba(124, 58, 237, 0.6);
+    }
+  }
 }
 
 // ─── Custom cursor: hide default on pointer-fine devices ─────────────────────

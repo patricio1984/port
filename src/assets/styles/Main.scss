@@ -110,7 +110,10 @@
     transform: translateY(-3px);
   }
 
-  svg { font-size: 1.35rem; }
+  svg {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
 }
 
 // ─── Photo — top right, receives magnetic JS ──────────────────────────────────

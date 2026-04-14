@@ -2,8 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
 gsap.registerPlugin(ScrollTrigger);
-import GitHubIcon from '@mui/icons-material/GitHub';
-import LinkedInIcon from '@mui/icons-material/LinkedIn';
+import { GitHubIcon, LinkedInIcon } from './SocialIcons';
 import profileImg from '../assets/images/profile.webp';
 import '../assets/styles/Main.scss';
 
