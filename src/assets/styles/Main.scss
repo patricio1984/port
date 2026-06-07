@@ -340,10 +340,10 @@
     );
   }
 
-  // Center hero content in light mode for a cleaner, symmetrical layout
+  // Restaurar alineación por defecto en modo claro (evita centrar nombre)
   .hero {
-    justify-items: center;
-    text-align: center;
+    justify-items: start;
+    text-align: left;
   }
 
   .hero__photo {
@@ -354,7 +354,8 @@
 
   .hero__text {
     align-self: center;
-    max-width: 720px;
+    /* Aumentado para evitar quiebres inesperados en nombres grandes */
+    max-width: min(860px, 80vw);
     margin-left: 0;
   }
 }
